@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Event Dispatcher Test</title>
+</head>
+<body>
+    <h3>Event Dispatcher Test</h3>
+
+    <!-- JS -->
+    <script src="../src/EventDispatcher.js"></script>
+    <script type="text/javascript">
+
+        // Global Utils.
+        if ( typeof Object.create !== 'function' ) {
+            Object.create = function( obj ) {
+                function F() {}
+                F.prototype = obj;
+                return new F();
+            };
+        }
+
+        // SAMPLE
+        // CarBase Klass.
+        var CarBase = Object.create( EventDispatcher );
+        // add car specific functionality
+        CarBase.start = function() {
+            console.log('car start');
+        }
+
+
+        // original Class or something, add EventDispatcher functionality to it.
+        var carA = Object.create( CarBase );
+        //
+        carA.on('start', function() {
+            carA.start();
+
+            setTimeout(function(){
+                console.log('remove start event');
+                carA.off('start');
+                carA.fire('start'); // check to see if it fires.
+            }, 200);
+        });
+
+        // simulate when event is fired.
+        setTimeout(function(){
+            carA.fire('start');
+        }, 1000);
+
+    </script>
+
+</body>
+</html>
